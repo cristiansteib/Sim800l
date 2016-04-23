@@ -5,10 +5,18 @@
 
 class sim800l		
 {									
+  private:
+  	String _readSerial();
+  	bool _recvFind(String target,String Data);
+
+
   public:
  	void begin();										
 	bool sendSms(char* number,char* text);	
 	void activateBearerProfile();
+  
+
+
 };
 
 #endif 

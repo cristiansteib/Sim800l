@@ -1,3 +1,7 @@
+/* this library is writing by  Cristian Steib.
+			steibkhriz@gmail.com
+
+*/
 #include "Arduino.h"
 #include "sim800l.h"
 #include <SoftwareSerial.h>
@@ -11,10 +15,10 @@ void sim800l::begin(){
 	SIM.begin(9600);
 
 }
-
-String readSerial(){
-  
-  
+//
+//PRIVATE METHODS
+//
+String sim800l::_readSerial(){
   timeout=0;
   while  (!SIM.available() && timeout < 900000  ) 
   {
@@ -25,14 +29,16 @@ String readSerial(){
   }
 }
 
-bool recvFind(String target,String Data){
-	if (Data.indexOf(target) != -1) 
-  {
-    return true;
-  }
-  return false;
+bool sim800l::_recvFind(String target,String Data){
+	if (Data.indexOf(target) != -1) {
+		return true;
+	}else 
+	return false;
 }
 
+//
+//PUBLIC METHODS
+//
 void sim800l::activateBearerProfile(){
   // set bearer parameter 
   SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));delay(1000);
@@ -53,11 +59,11 @@ bool sim800l::sendSms(char* number,char* text){
     delay(1000);
     SIM.print((char)26);
     delay(1000);
-    buffer=readSerial();
-    while (recvFind("+CMTI:",buffer)  || recvFind("RING",buffer)  ){
-    	buffer=readSerial();
+    buffer=_readSerial();
+    while (_recvFind("+CMTI:",buffer)  || _recvFind("RING",buffer)  ){
+    	buffer=_readSerial();
     }
-    if (recvFind("CMGS",buffer)){
+    if (_recvFind("CMGS",buffer)){
       return true;
     }
     else {
