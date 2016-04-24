@@ -15,6 +15,8 @@ void Sim800l::begin(){
 	SIM.begin(9600);
 
 }
+
+
 //
 //PRIVATE METHODS
 //
