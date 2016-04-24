@@ -1,0 +1,4 @@
+Sim800l	KEYWORD1
+begin KEYWORD 2 
+sendSms	KEYWORD2
+activateBearerProfile	KEYWORD2
