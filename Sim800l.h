@@ -20,7 +20,8 @@ class Sim800l
  	void begin();	
  	void Reset();  									
 	bool sendSms(char* number,char* text);	 
-	String readSms(uint8_t number);
+	String readSms(uint8_t number); //return all the content of sms 
+	String delAllSms();     // return :  OK or ERROR .. 
 	void activateBearerProfile();
 	void deactivateBearerProfile();
   

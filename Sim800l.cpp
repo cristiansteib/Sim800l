@@ -43,7 +43,6 @@ void Sim800l::Reset(){
   delay(1000);
   digitalWrite(RESET_PIN,0);
   delay(1000);
-
   // wait for the module response
   SIM.print(F("AT\r\n"));
   while (_readSerial().indexOf("OK")==-1 ){
@@ -109,3 +108,7 @@ String Sim800l::readSms(uint8_t number){
     return "";
 }
 
+String Sim800l::delAllSms(){ 
+  SIM.print(F("at+cmgda=\"del all\"\n\r"));
+  return _readSerial();  
+}

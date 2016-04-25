@@ -1,4 +1,23 @@
+#######################################
+# Syntax Coloring Map For Sim800l
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
 Sim800l	KEYWORD1
-begin KEYWORD 2 
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin KEYWORD2 
+Reset KEYWORD2
 sendSms	KEYWORD2
+readSms KEYWORD2 
+delAllSms KEYWORD2
 activateBearerProfile	KEYWORD2
+deactivateBearerProfile KEYWORD2
+
