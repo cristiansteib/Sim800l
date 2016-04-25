@@ -1,13 +1,13 @@
 /*
 
-			Example for Sim800l library
-	by Cristian Steib , < steibkhriz@gmail.com >
+Example for Sim800l library
+by Cristian Steib , < steibkhriz@gmail.com >
 
-		Demonstrate the use of the library
-				for send a sms. 
+Demonstrate the use of the library
+for send a sms. 
 
 
-			Created 24 April 2016
+Created 24 April 2016
 
 */
 
