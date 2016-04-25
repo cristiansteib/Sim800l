@@ -36,7 +36,7 @@ String Sim800l::_readSerial(){
 //PUBLIC METHODS
 //
 
-void Sim800l::Reset(){
+void Sim800l::reset(){
   analogWrite(LED_ERROR_PIN,255);
   analogWrite(LED_NOTIFICATION_PIN,255);
   digitalWrite(RESET_PIN,1);
