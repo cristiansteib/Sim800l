@@ -6,7 +6,7 @@
 #include "Sim800l.h"
 #include <SoftwareSerial.h>
 
-SoftwareSerial SIM(10,11);
+SoftwareSerial SIM(RX_PIN,TX_PIN);
 long int timeout;
 String buffer;
 
@@ -111,4 +111,26 @@ String Sim800l::readSms(uint8_t number){
 String Sim800l::delAllSms(){ 
   SIM.print(F("at+cmgda=\"del all\"\n\r"));
   return _readSerial();  
+}
+
+void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second){
+  SIM.print(F("at+cclk?\r\n"));
+  // if respond with ERROR try one more time. 
+  buffer=_readSerial();
+  if ((buffer.indexOf("ERR"))!=-1){
+    delay(50);
+    SIM.print(F("at+cclk?\r\n"));
+  } 
+  if ((buffer.indexOf("ERR"))==-1){
+    buffer=buffer.substring(buffer.indexOf("\"")+1,buffer.lastIndexOf("\"")-1);  
+    Serial.println(buffer);
+    *year=buffer.substring(0,2).toInt();
+    *month= buffer.substring(3,5).toInt();
+    *day=buffer.substring(6,8).toInt();
+    *hour=buffer.substring(9,11).toInt();
+    *minute=buffer.substring(12,14).toInt();
+    *second=buffer.substring(15,17).toInt();
+ }
+
+
 }

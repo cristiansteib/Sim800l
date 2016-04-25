@@ -7,6 +7,9 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
+
+#define RX_PIN 10
+#define TX_PIN 11	
 #define RESET_PIN 2   // pin to the reset pin sim800l
 #define LED_ERROR_PIN A0 //pin to indicate errors
 #define LED_NOTIFICATION_PIN A1 
@@ -24,9 +27,8 @@ class Sim800l
 	String delAllSms();     // return :  OK or ERROR .. 
 	void activateBearerProfile();
 	void deactivateBearerProfile();
-  
-
-
+	//get time with the variables by reference
+		void RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second);  
 };
 
 #endif 
