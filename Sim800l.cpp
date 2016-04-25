@@ -22,7 +22,7 @@ void Sim800l::begin(){
 //
 String Sim800l::_readSerial(){
   timeout=0;
-  while  (!SIM.available() && timeout < 900000  ) 
+  while  (!SIM.available() && timeout < 5000000  ) 
   {
     timeout++;
   }
@@ -36,7 +36,7 @@ String Sim800l::_readSerial(){
 //PUBLIC METHODS
 //
 
-void Sim800l::Reset(){
+void Sim800l::reset(){
   analogWrite(LED_ERROR_PIN,255);
   analogWrite(LED_NOTIFICATION_PIN,255);
   digitalWrite(RESET_PIN,1);
@@ -57,9 +57,8 @@ void Sim800l::Reset(){
 
 
 void Sim800l::activateBearerProfile(){
-  // set bearer parameter 
-  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));buffer=_readSerial();//delay(1200);
-  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));buffer=_readSerial();//delay(1200);  // set apn  
+  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));buffer=_readSerial();  // set bearer parameter 
+  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));buffer=_readSerial(); // set apn  
   SIM.print (F(" AT+SAPBR=1,1 \r\n"));delay(1200);buffer=_readSerial();// activate bearer context
   SIM.print (F(" AT+SAPBR=2,1\r\n "));delay(3000);buffer=_readSerial(); // get context ip address
 }
@@ -142,6 +141,48 @@ String Sim800l::dateNet() {
   if (buffer.indexOf("OK")!=-1 ){
     return buffer.substring(buffer.indexOf(":")+2,(buffer.indexOf("OK")-4));
   } else
-  return "0";
-      
+  return "0";      
+}
+
+// Update the RTC of the module with the date of network. 
+bool Sim800l::updateRtc(){
+  
+  activateBearerProfile();
+  buffer=dateNet();
+  deactivateBearerProfile();
+  
+  buffer=buffer.substring(buffer.indexOf(",")+1,buffer.length());
+  String dt=buffer.substring(0,buffer.indexOf(","));
+  String tm=buffer.substring(buffer.indexOf(",")+1,buffer.length()) ;
+
+  int hour = tm.substring(0,2).toInt();
+  int day = dt.substring(8,10).toInt();
+
+  hour=hour+WORLDCLOCK;
+
+  String tmp_hour;
+  String tmp_day;
+  //TODO : fix if the day is 0, this occur when day is 1 then decrement to 1, 
+  //       will need to check the last month what is the last day .  
+  if (hour<0){
+    hour+=24;
+    day-=1;
+  }
+  if (hour<10){
+
+      tmp_hour="0"+String(hour);
+  }else{
+    tmp_hour=String(hour);
+  }
+  if (day<10){
+    tmp_day="0"+String(day);    
+  }else{
+    tmp_day=String(day);
+  }
+    //for debugging
+  //Serial.println("at+cclk=\""+dt.substring(2,4)+"/"+dt.substring(5,7)+"/"+tmp_day+","+tmp_hour+":"+tm.substring(3,5)+":"+tm.substring(6,8)+"-03\"\r\n");
+  SIM.print("at+cclk=\""+dt.substring(2,4)+"/"+dt.substring(5,7)+"/"+tmp_day+","+tmp_hour+":"+tm.substring(3,5)+":"+tm.substring(6,8)+"-03\"\r\n");
+  if ( (_readSerial().indexOf("ER"))!=-1) {return false;}else return true;
+
+   
   }

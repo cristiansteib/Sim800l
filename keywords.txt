@@ -14,7 +14,7 @@ Sim800l	KEYWORD1
 #######################################
 
 begin KEYWORD2 
-Reset KEYWORD2
+reset KEYWORD2
 sendSms	KEYWORD2
 readSms KEYWORD2 
 delAllSms KEYWORD2
@@ -22,3 +22,4 @@ activateBearerProfile	KEYWORD2
 deactivateBearerProfile KEYWORD2
 RTCtime KEYWORD2
 dateNet KEYWORD2
+updateRtc KEYWORD2
