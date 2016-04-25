@@ -20,4 +20,5 @@ readSms KEYWORD2
 delAllSms KEYWORD2
 activateBearerProfile	KEYWORD2
 deactivateBearerProfile KEYWORD2
-
+RTCtime KEYWORD2
+dateNet KEYWORD2

@@ -58,10 +58,10 @@ void Sim800l::Reset(){
 
 void Sim800l::activateBearerProfile(){
   // set bearer parameter 
-  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));delay(1000);
-  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));delay(1000);  // set apn  
-  SIM.print (F(" AT+SAPBR=1,1 \r\n")); delay(1000);// activate bearer context
-  SIM.print (F(" AT+SAPBR=2,1\r\n ")); delay(1000);// get context ip address
+  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));buffer=_readSerial();//delay(1200);
+  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));buffer=_readSerial();//delay(1200);  // set apn  
+  SIM.print (F(" AT+SAPBR=1,1 \r\n"));delay(1200);buffer=_readSerial();// activate bearer context
+  SIM.print (F(" AT+SAPBR=2,1\r\n "));delay(3000);buffer=_readSerial(); // get context ip address
 }
 
 
@@ -108,10 +108,12 @@ String Sim800l::readSms(uint8_t number){
     return "";
 }
 
+
 String Sim800l::delAllSms(){ 
   SIM.print(F("at+cmgda=\"del all\"\n\r"));
   return _readSerial();  
 }
+
 
 void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second){
   SIM.print(F("at+cclk?\r\n"));
@@ -130,6 +132,16 @@ void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int 
     *minute=buffer.substring(12,14).toInt();
     *second=buffer.substring(15,17).toInt();
  }
-
-
 }
+
+//Get the time  of the base of network
+String Sim800l::dateNet() {
+  SIM.print(F("AT+CIPGSMLOC=2,1\r\n "));
+  buffer=_readSerial();
+
+  if (buffer.indexOf("OK")!=-1 ){
+    return buffer.substring(buffer.indexOf(":")+2,(buffer.indexOf("OK")-4));
+  } else
+  return "0";
+      
+  }

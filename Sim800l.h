@@ -29,6 +29,7 @@ class Sim800l
 	void deactivateBearerProfile();
 	//get time with the variables by reference
 		void RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second);  
+	String dateNet(); //return date,time, of the network
 };
 
 #endif 

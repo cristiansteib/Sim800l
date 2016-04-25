@@ -4,7 +4,7 @@ Example for Sim800l library
 by Cristian Steib , < steibkhriz@gmail.com >
 
 Demonstrate the use of the library
-for send a sms. 
+for read a sms. 
 
 
 Created 24 April 2016
