@@ -13,6 +13,7 @@
 #define RESET_PIN 2   // pin to the reset pin sim800l
 #define LED_ERROR_PIN A0 //pin to indicate errors
 #define LED_NOTIFICATION_PIN A1 
+#define WORLDCLOCK -3  //for the clock
 
 class Sim800l		
 {									
@@ -28,8 +29,9 @@ class Sim800l
 	void activateBearerProfile();
 	void deactivateBearerProfile();
 	//get time with the variables by reference
-		void RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second);  
+	void RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second);  
 	String dateNet(); //return date,time, of the network
+	bool updateRtc();  //Update the RTC Clock with de Time AND Date of red-.
 };
 
 #endif 
