@@ -123,7 +123,6 @@ void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int 
   } 
   if ((buffer.indexOf("ERR"))==-1){
     buffer=buffer.substring(buffer.indexOf("\"")+1,buffer.lastIndexOf("\"")-1);  
-    Serial.println(buffer);
     *year=buffer.substring(0,2).toInt();
     *month= buffer.substring(3,5).toInt();
     *day=buffer.substring(6,8).toInt();
