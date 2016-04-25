@@ -7,17 +7,22 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 
+#define RESET_PIN 2   // pin to the reset pin sim800l
+#define LED_ERROR_PIN A0 //pin to indicate errors
+#define LED_NOTIFICATION_PIN A1 
+
 class Sim800l		
 {									
   private:
   	String _readSerial();
-  	bool _recvFind(String target,String Data);
-
-
+  	
   public:
- 	void begin();										
+ 	void begin();	
+ 	void Reset();  									
 	bool sendSms(char* number,char* text);	 
+	String readSms(uint8_t number);
 	void activateBearerProfile();
+	void deactivateBearerProfile();
   
 
 
