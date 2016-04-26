@@ -10,4 +10,8 @@ Arduino Uno  |   Sim800l   |    Notes
 2   RESET_PIN | RST| Reset Pin
 GND | GND | 
 
+
+You can regulate the voltage to the desired with this, is not the best,
+but for start it's easy.
+
 ![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/power_supply.png "Logo Title Text 1")
