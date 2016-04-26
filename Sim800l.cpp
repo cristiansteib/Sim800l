@@ -7,12 +7,13 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial SIM(RX_PIN,TX_PIN);
-long int timeout;
-String buffer;
 
 
 void Sim800l::begin(){
 	SIM.begin(9600);
+  #if (LED) 
+    pinMode(OUTPUT,LED_PIN);
+  #endif
 
 }
 
@@ -21,10 +22,13 @@ void Sim800l::begin(){
 //PRIVATE METHODS
 //
 String Sim800l::_readSerial(){
-  timeout=0;
-  while  (!SIM.available() && timeout < 5000000  ) 
+  _timeout=0;
+  while  (!SIM.available() && _timeout < 12000  ) 
   {
-    timeout++;
+    delay(15);
+    _timeout++;
+
+
   }
   if (SIM.available()) {
  	return SIM.readString();
@@ -37,8 +41,10 @@ String Sim800l::_readSerial(){
 //
 
 void Sim800l::reset(){
-  analogWrite(LED_ERROR_PIN,255);
-  analogWrite(LED_NOTIFICATION_PIN,255);
+  #if (LED)
+    digitalWrite(LED_PIN,1);
+    analogWrite(A0,255);
+  #endif 
   digitalWrite(RESET_PIN,1);
   delay(1000);
   digitalWrite(RESET_PIN,0);
@@ -51,16 +57,18 @@ void Sim800l::reset(){
   //wait for sms ready
   while (_readSerial().indexOf("SMS")==-1 ){
   }
-  analogWrite(LED_NOTIFICATION_PIN,0);
-  analogWrite(LED_ERROR_PIN,0);
+  #if (LED)
+    digitalWrite(LED_PIN,0);
+    analogWrite(A0,0);
+  #endif 
 }
 
 
 void Sim800l::activateBearerProfile(){
-  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));buffer=_readSerial();  // set bearer parameter 
-  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));buffer=_readSerial(); // set apn  
-  SIM.print (F(" AT+SAPBR=1,1 \r\n"));delay(1200);buffer=_readSerial();// activate bearer context
-  SIM.print (F(" AT+SAPBR=2,1\r\n "));delay(3000);buffer=_readSerial(); // get context ip address
+  SIM.print (F(" AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\" \r\n" ));_buffer=_readSerial();  // set bearer parameter 
+  SIM.print (F(" AT+SAPBR=3,1,\"APN\",\"internet\" \r\n" ));_buffer=_readSerial(); // set apn  
+  SIM.print (F(" AT+SAPBR=1,1 \r\n"));delay(1200);_buffer=_readSerial();// activate bearer context
+  SIM.print (F(" AT+SAPBR=2,1\r\n "));delay(3000);_buffer=_readSerial(); // get context ip address
 }
 
 
@@ -71,22 +79,28 @@ void Sim800l::deactivateBearerProfile(){
 
 
 bool Sim800l::sendSms(char* number,char* text){
+  Serial.println(text);
     SIM.print (F("AT+CMGF=1\r")); //set sms to text mode  
-    delay(1000);  // #TODO: wait for OK response or expect that.
+    _buffer=_readSerial();
+    Serial.println("p");
     SIM.print (F("AT+CMGS=\""));  // command to send sms
     SIM.print (number);           
     SIM.print(F("\"\r"));       
-    delay(1200); 
+    _buffer=_readSerial(); 
+    Serial.println("s");
     SIM.print (text);
     SIM.print ("\r"); 
-    delay(1000);
+    delay(100);
+    Serial.println("t");
     SIM.print((char)26);
-    delay(1000);
-    // verify if the buffer have some notification, that they don't need for this
-    while ( ((_readSerial().indexOf("+CMTI") ) != -1 ) || ((_readSerial().indexOf("RING") ) != -1 )  ){
+    Serial.println("c");
+    // verify if the _buffer have some notification, that they don't need for this
+    _buffer=_readSerial();
+    while ( ((_buffer.indexOf("+CMTI") ) != -1 ) || ((_buffer.indexOf("RING") ) != -1 )  ){
+      _buffer=_readSerial();
     }
     //expect CMGS:xxx   , where xxx is a number,for the sending sms.
-    if (((_readSerial().indexOf("CMGS") ) != -1 ) ){
+    if (((_buffer.indexOf("CMGS") ) != -1 ) ){
       return true;
     }
     else {
@@ -117,48 +131,48 @@ String Sim800l::delAllSms(){
 void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int *second){
   SIM.print(F("at+cclk?\r\n"));
   // if respond with ERROR try one more time. 
-  buffer=_readSerial();
-  if ((buffer.indexOf("ERR"))!=-1){
+  _buffer=_readSerial();
+  if ((_buffer.indexOf("ERR"))!=-1){
     delay(50);
     SIM.print(F("at+cclk?\r\n"));
   } 
-  if ((buffer.indexOf("ERR"))==-1){
-    buffer=buffer.substring(buffer.indexOf("\"")+1,buffer.lastIndexOf("\"")-1);  
-    *year=buffer.substring(0,2).toInt();
-    *month= buffer.substring(3,5).toInt();
-    *day=buffer.substring(6,8).toInt();
-    *hour=buffer.substring(9,11).toInt();
-    *minute=buffer.substring(12,14).toInt();
-    *second=buffer.substring(15,17).toInt();
+  if ((_buffer.indexOf("ERR"))==-1){
+    _buffer=_buffer.substring(_buffer.indexOf("\"")+1,_buffer.lastIndexOf("\"")-1);  
+    *year=_buffer.substring(0,2).toInt();
+    *month= _buffer.substring(3,5).toInt();
+    *day=_buffer.substring(6,8).toInt();
+    *hour=_buffer.substring(9,11).toInt();
+    *minute=_buffer.substring(12,14).toInt();
+    *second=_buffer.substring(15,17).toInt();
  }
 }
 
 //Get the time  of the base of network
 String Sim800l::dateNet() {
   SIM.print(F("AT+CIPGSMLOC=2,1\r\n "));
-  buffer=_readSerial();
+  _buffer=_readSerial();
 
-  if (buffer.indexOf("OK")!=-1 ){
-    return buffer.substring(buffer.indexOf(":")+2,(buffer.indexOf("OK")-4));
+  if (_buffer.indexOf("OK")!=-1 ){
+    return _buffer.substring(_buffer.indexOf(":")+2,(_buffer.indexOf("OK")-4));
   } else
   return "0";      
 }
 
 // Update the RTC of the module with the date of network. 
-bool Sim800l::updateRtc(){
+bool Sim800l::updateRtc(int utc){
   
   activateBearerProfile();
-  buffer=dateNet();
+  _buffer=dateNet();
   deactivateBearerProfile();
   
-  buffer=buffer.substring(buffer.indexOf(",")+1,buffer.length());
-  String dt=buffer.substring(0,buffer.indexOf(","));
-  String tm=buffer.substring(buffer.indexOf(",")+1,buffer.length()) ;
+  _buffer=_buffer.substring(_buffer.indexOf(",")+1,_buffer.length());
+  String dt=_buffer.substring(0,_buffer.indexOf(","));
+  String tm=_buffer.substring(_buffer.indexOf(",")+1,_buffer.length()) ;
 
   int hour = tm.substring(0,2).toInt();
   int day = dt.substring(8,10).toInt();
 
-  hour=hour+WORLDCLOCK;
+  hour=hour+utc;
 
   String tmp_hour;
   String tmp_day;
