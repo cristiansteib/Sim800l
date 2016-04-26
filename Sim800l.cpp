@@ -79,21 +79,17 @@ void Sim800l::deactivateBearerProfile(){
 
 
 bool Sim800l::sendSms(char* number,char* text){
-  Serial.println(text);
+
     SIM.print (F("AT+CMGF=1\r")); //set sms to text mode  
     _buffer=_readSerial();
-    Serial.println("p");
     SIM.print (F("AT+CMGS=\""));  // command to send sms
     SIM.print (number);           
     SIM.print(F("\"\r"));       
     _buffer=_readSerial(); 
-    Serial.println("s");
     SIM.print (text);
     SIM.print ("\r"); 
     delay(100);
-    Serial.println("t");
     SIM.print((char)26);
-    Serial.println("c");
     // verify if the _buffer have some notification, that they don't need for this
     _buffer=_readSerial();
     while ( ((_buffer.indexOf("+CMTI") ) != -1 ) || ((_buffer.indexOf("RING") ) != -1 )  ){
@@ -147,7 +143,7 @@ void Sim800l::RTCtime(int *day,int *month, int *year,int *hour,int *minute, int 
  }
 }
 
-//Get the time  of the base of network
+//Get the time  of the base of GSM
 String Sim800l::dateNet() {
   SIM.print(F("AT+CIPGSMLOC=2,1\r\n "));
   _buffer=_readSerial();
@@ -158,7 +154,7 @@ String Sim800l::dateNet() {
   return "0";      
 }
 
-// Update the RTC of the module with the date of network. 
+// Update the RTC of the module with the date of GSM. 
 bool Sim800l::updateRtc(int utc){
   
   activateBearerProfile();
