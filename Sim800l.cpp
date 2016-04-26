@@ -77,6 +77,35 @@ void Sim800l::deactivateBearerProfile(){
   delay(1500);
 }
 
+//check this
+bool Sim800l::answerCall(){
+   SIM.print (F("ATA\r\n"));
+   _buffer=_readSerial();
+   //Response in case of data call, if successfully connected 
+   if ( (_buffer.indexOf("CON") )!=-1 ) return true;  // CONNECTED OR OK? TEST 
+   else return false;
+}
+//check this
+bool Sim800l::callNumber(char* number){
+  SIM.print (F("ATD+"));
+  SIM.print (number);
+  SIM.print (F("\r\n"));
+  _buffer=_readSerial();
+  if ( (_buffer.indexOf("OK") ) != -1) return true;
+  else return false;
+}
+
+bool Sim800l::hangoffCall(){
+  SIM.print (F("ATH\r\n"));
+  _buffer=_readSerial();
+  if ( (_buffer.indexOf("OK") ) != -1) return true;
+  else return false;
+}
+
+
+
+
+
 
 bool Sim800l::sendSms(char* number,char* text){
 

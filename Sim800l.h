@@ -27,7 +27,10 @@ class Sim800l
   	
   public:
  	void begin();	
- 	void reset();  									
+ 	void reset(); 
+ 	bool answerCall(); 	
+ 	bool callNumber(char* number);
+ 	bool hangoffCall();								
 	bool sendSms(char* number,char* text);	 
 	String readSms(uint8_t number); //return all the content of sms 
 	String delAllSms();     // return :  OK or ERROR .. 
