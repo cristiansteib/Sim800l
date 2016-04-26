@@ -1,8 +1,8 @@
 ## Library SIM800l Module for Arduino UNO
 The Purpose of This library is to use the module in the most easy way and transparent.
 
-####To download.
-Go to [releases](https://github.com/cristiansteib/Sim800l/releases) click the Source Code (zip) button, rename the uncompressed folder **Sim800l**. 
+##To download and Install.
+Go to [Releases](https://github.com/cristiansteib/Sim800l/releases) click the " Source Code (zip) " button, then rename the uncompressed folder to **Sim800l**. 
   Check that the *Sim800l* folder contains Sim800l.cpp and Sim800l.h
 
 Go to arduino IDE Sketch >> Import Library >> add library... Select the folder Sim800l
