@@ -18,6 +18,6 @@ but for start it's easy.
 
 
 
-For the **reset pin** they need npn transistor, this is an example circuit that you can use.
+For the **reset pin** they need NPN transistor, this is an example circuit that you can use.
 
 ![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/RESET.png "reset_circuit")
