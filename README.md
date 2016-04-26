@@ -1,6 +1,15 @@
 ## Library SIM800l Module for Arduino UNO
 The Purpose of This library is to use the module in the most easy way and transparent.
 
+To download. click the DOWNLOAD ZIP button, rename the uncompressed folder **Sim800l**. 
+  Check that the *Sim800l* folder contains Sim800l.cpp and Sim800l.h
+
+Go to arduino IDE Sketch >> Import Library >> add library... Select the folde Sim800l
+OR 
+Place the Sim800l library folder your arduinosketchfolder/libraries/ folder. 
+You may need to create the libraries subfolder if its your first library. Restart the IDE.
+
+
 ## connections & pinouts
 Arduino Uno  |   Sim800l   |    Notes  
 -------------|-------------|------------
