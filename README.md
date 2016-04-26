@@ -9,3 +9,5 @@ Arduino Uno  |   Sim800l   |    Notes
 11 TX_PIN | RX |
 2   RESET_PIN | RST| Reset Pin
 GND | GND | 
+
+![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/power_supply.png "Logo Title Text 1")
