@@ -14,4 +14,10 @@ GND | GND |
 You can regulate the voltage to the desired with this, is not the best,
 but for start it's easy.
 
-![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/power_supply.png "Logo Title Text 1")
+![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/power_supply.png "LM317")
+
+
+
+For the **reset pin** they need npn transistor, this is an example circuit that you can use.
+
+![alt text](https://github.com/cristiansteib/Sim800l/blob/master/images/RESET.png "reset_circuit")
