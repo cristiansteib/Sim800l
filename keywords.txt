@@ -13,13 +13,30 @@ Sim800l	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-begin KEYWORD2 
-reset KEYWORD2
+
+
+
+
+# Methods for calling (KEYWORD2)
+#######################################
+answerCall KEYWORD2
+callNumber KEYWORD2
+hangoffCall KEYWORD2
+
+
+# Methods for Sms (KEYWORD2)
+#######################################
 sendSms	KEYWORD2
 readSms KEYWORD2 
 delAllSms KEYWORD2
+
+# Methods for Module (KEYWORD2)
+#######################################
+begin KEYWORD2 
+reset KEYWORD2
 activateBearerProfile	KEYWORD2
 deactivateBearerProfile KEYWORD2
 RTCtime KEYWORD2
 dateNet KEYWORD2
 updateRtc KEYWORD2
+setPhoneFunctionality KEYWORD2
