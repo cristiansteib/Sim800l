@@ -7,14 +7,14 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial SIM(RX_PIN,TX_PIN);
-
+//String _buffer;
 
 void Sim800l::begin(){
 	SIM.begin(9600);
   #if (LED) 
     pinMode(OUTPUT,LED_PIN);
   #endif
-
+  _buffer.reserve(120); //reserve memory to prevent intern fragmention
 }
 
 
@@ -25,7 +25,7 @@ String Sim800l::_readSerial(){
   _timeout=0;
   while  (!SIM.available() && _timeout < 12000  ) 
   {
-    delay(15);
+    delay(13);
     _timeout++;
 
 
@@ -33,6 +33,8 @@ String Sim800l::_readSerial(){
   if (SIM.available()) {
  	return SIM.readString();
   }
+  
+
 }
 
 
@@ -43,24 +45,35 @@ String Sim800l::_readSerial(){
 void Sim800l::reset(){
   #if (LED)
     digitalWrite(LED_PIN,1);
-    analogWrite(A0,255);
   #endif 
   digitalWrite(RESET_PIN,1);
   delay(1000);
   digitalWrite(RESET_PIN,0);
   delay(1000);
   // wait for the module response
+
   SIM.print(F("AT\r\n"));
   while (_readSerial().indexOf("OK")==-1 ){
     SIM.print(F("AT\r\n"));
   }
+  
   //wait for sms ready
   while (_readSerial().indexOf("SMS")==-1 ){
   }
   #if (LED)
     digitalWrite(LED_PIN,0);
-    analogWrite(A0,0);
   #endif 
+}
+
+void Sim800l::setPhoneFunctionality(){
+  /*AT+CFUN=<fun>[,<rst>] 
+  Parameters
+  <fun> 0 Minimum functionality
+  1 Full functionality (Default)
+  4 Disable phone both transmit and receive RF circuits.
+  <rst> 1 Reset the MT before setting it to <fun> power level.
+  */
+  SIM.print (F("AT+CFUN=1\r\n"));
 }
 
 
@@ -77,24 +90,45 @@ void Sim800l::deactivateBearerProfile(){
   delay(1500);
 }
 
-//check this
+
+//THIS IS WORKING
 bool Sim800l::answerCall(){
    SIM.print (F("ATA\r\n"));
    _buffer=_readSerial();
    //Response in case of data call, if successfully connected 
-   if ( (_buffer.indexOf("CON") )!=-1 ) return true;  // CONNECTED OR OK? TEST 
+   if ( (_buffer.indexOf("OK") )!=-1 ) return true;  // CONNECTED OR OK? TEST 
    else return false;
 }
-//check this
-bool Sim800l::callNumber(char* number){
-  SIM.print (F("ATD+"));
+
+
+//THIS WORKS 
+void  Sim800l::callNumber(char* number){
+  SIM.print (F("ATD"));
   SIM.print (number);
   SIM.print (F("\r\n"));
-  _buffer=_readSerial();
-  if ( (_buffer.indexOf("OK") ) != -1) return true;
-  else return false;
+  //return true;
 }
 
+
+
+uint8_t Sim800l::getCallStatus(){
+/*
+  values of return:
+ 
+ 0 Ready (MT allows commands from TA/TE)
+ 2 Unknown (MT is not guaranteed to respond to tructions)
+ 3 Ringing (MT is ready for commands from TA/TE, but the ringer is active)
+ 4 Call in progress
+
+*/
+  SIM.print (F("AT+CPAS\r\n"));
+  _buffer=_readSerial();  
+  return _buffer.substring(_buffer.indexOf("+CPAS: ")+7,_buffer.indexOf("+CPAS: ")+9).toInt();
+
+}
+
+
+//TODO: TRY IF THIS WORKS 
 bool Sim800l::hangoffCall(){
   SIM.print (F("ATH\r\n"));
   _buffer=_readSerial();
@@ -119,11 +153,7 @@ bool Sim800l::sendSms(char* number,char* text){
     SIM.print ("\r"); 
     delay(100);
     SIM.print((char)26);
-    // verify if the _buffer have some notification, that they don't need for this
     _buffer=_readSerial();
-    while ( ((_buffer.indexOf("+CMTI") ) != -1 ) || ((_buffer.indexOf("RING") ) != -1 )  ){
-      _buffer=_readSerial();
-    }
     //expect CMGS:xxx   , where xxx is a number,for the sending sms.
     if (((_buffer.indexOf("CMGS") ) != -1 ) ){
       return true;

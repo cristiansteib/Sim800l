@@ -28,12 +28,19 @@ class Sim800l
   public:
  	void begin();	
  	void reset(); 
+
+ 	// Methods for calling || Funciones de llamadas. 
  	bool answerCall(); 	
- 	bool callNumber(char* number);
- 	bool hangoffCall();								
+ 	void callNumber(char* number);
+ 	bool hangoffCall();
+ 	uint8_t getCallStatus();   
+ 	//Methods for sms || Funciones de SMS.
 	bool sendSms(char* number,char* text);	 
 	String readSms(uint8_t number); //return all the content of sms 
 	String delAllSms();     // return :  OK or ERROR .. 
+
+
+	void setPhoneFunctionality();
 	void activateBearerProfile();
 	void deactivateBearerProfile();
 	//get time with the variables by reference
