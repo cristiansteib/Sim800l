@@ -209,9 +209,15 @@ bool Sim800l::sendSms(char* number,char* text){
 
 String Sim800l::getNumberSms(uint8_t index){
   _buffer=readSms(index);
-  uint8_t _idx1=_buffer.indexOf("+CMGR:");
-  _idx1=_buffer.indexOf("\",\"",_idx1+1);
-  return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
+  Serial.println(_buffer.length());
+  if (_buffer.length() > 10) //avoid empty sms
+  {
+    uint8_t _idx1=_buffer.indexOf("+CMGR:");
+    _idx1=_buffer.indexOf("\",\"",_idx1+1);
+    return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
+  }else{
+    return "";
+  }
 }
 
 
