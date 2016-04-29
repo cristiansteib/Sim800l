@@ -88,7 +88,7 @@ void loop(){
     			}
 
 
-    		//Sim800l.delAllSms(); //do only if the message is not empty,in other case is not necesary
+    		Sim800l.delAllSms(); //do only if the message is not empty,in other case is not necesary
     		 //delete all sms..so when receive a new sms always will be in first position
     		} 
 
