@@ -23,9 +23,11 @@ class Sim800l
   private:
 	int _timeout;
 	String _buffer;
-  	String _readSerial();
+		String _readSerial();
+  	
   	
   public:
+
  	void begin();	
  	void reset(); 
 
@@ -39,7 +41,7 @@ class Sim800l
 	String readSms(uint8_t number); //return all the content of sms 
 	String delAllSms();     // return :  OK or ERROR .. 
 
-
+	void signalQuality();
 	void setPhoneFunctionality();
 	void activateBearerProfile();
 	void deactivateBearerProfile();
