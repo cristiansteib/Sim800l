@@ -209,7 +209,7 @@ bool Sim800l::sendSms(char* number,char* text){
 
 String Sim800l::getNumberSms(uint8_t index){
   _buffer=readSms(index);
-  int _idx1=_buffer.indexOf("+CMGR:");
+  uint8_t _idx1=_buffer.indexOf("+CMGR:");
   _idx1=_buffer.indexOf("\",\"",_idx1+1);
   return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
 }
