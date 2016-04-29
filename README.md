@@ -23,7 +23,7 @@ Arduino Uno  |   Sim800l   |    Notes
 GND | GND | 
 
 
-## methods and functions
+## Methods and functions
 
 Name|Return|Notes
 :-------|:-------:|:-----------------------------------------------:|
