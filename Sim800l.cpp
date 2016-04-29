@@ -40,7 +40,7 @@ void Sim800l::begin(){
   #if (LED) 
     pinMode(OUTPUT,LED_PIN);
   #endif
-  _buffer.reserve(120); //reserve memory to prevent intern fragmention
+  _buffer.reserve(255); //reserve memory to prevent intern fragmention
 }
 
 
@@ -209,9 +209,15 @@ bool Sim800l::sendSms(char* number,char* text){
 
 String Sim800l::getNumberSms(uint8_t index){
   _buffer=readSms(index);
-  int _idx1=_buffer.indexOf("+CMGR:");
-  _idx1=_buffer.indexOf("\",\"",_idx1+1);
-  return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
+  Serial.println(_buffer.length());
+  if (_buffer.length() > 10) //avoid empty sms
+  {
+    uint8_t _idx1=_buffer.indexOf("+CMGR:");
+    _idx1=_buffer.indexOf("\",\"",_idx1+1);
+    return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
+  }else{
+    return "";
+  }
 }
 
 
@@ -222,8 +228,12 @@ String Sim800l::readSms(uint8_t index){
     SIM.print (F("AT+CMGR="));
     SIM.print (index);
     SIM.print("\r");
-    return _readSerial();
-  }
+    _buffer=_readSerial();
+    if (_buffer.indexOf("CMGR:")!=-1){
+      return _buffer;
+    }
+    else return "";    
+    }
   else
     return "";
 }
