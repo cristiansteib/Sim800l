@@ -207,11 +207,20 @@ bool Sim800l::sendSms(char* number,char* text){
 }
 
 
-String Sim800l::readSms(uint8_t number){
+String Sim800l::getNumberSms(uint8_t index){
+  _buffer=readSms(index);
+  int _idx1=_buffer.indexOf("+CMGR:");
+  _idx1=_buffer.indexOf("\",\"",_idx1+1);
+  return _buffer.substring(_idx1+3,_buffer.indexOf("\",\"",_idx1+4));
+}
+
+
+
+String Sim800l::readSms(uint8_t index){
   SIM.print (F("AT+CMGF=1\r")); 
   if (( _readSerial().indexOf("ER")) ==-1) {
     SIM.print (F("AT+CMGR="));
-    SIM.print (number);
+    SIM.print (index);
     SIM.print("\r");
     return _readSerial();
   }

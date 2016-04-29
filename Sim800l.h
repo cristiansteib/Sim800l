@@ -64,7 +64,8 @@ class Sim800l
  	uint8_t getCallStatus();   
  	//Methods for sms || Funciones de SMS.
 	bool sendSms(char* number,char* text);	 
-	String readSms(uint8_t number); //return all the content of sms 
+	String readSms(uint8_t index); //return all the content of sms
+	String getNumberSms(uint8_t index); //return the number of the sms..   
 	bool delAllSms();     // return :  OK or ERROR .. 
 
 	void signalQuality();

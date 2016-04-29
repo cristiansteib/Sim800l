@@ -29,6 +29,7 @@ hangoffCall KEYWORD2
 sendSms	KEYWORD2
 readSms KEYWORD2 
 delAllSms KEYWORD2
+getNumberSms KEYWORD2
 
 # Methods for Module (KEYWORD2)
 #######################################
