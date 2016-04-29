@@ -65,7 +65,7 @@ class Sim800l
  	//Methods for sms || Funciones de SMS.
 	bool sendSms(char* number,char* text);	 
 	String readSms(uint8_t number); //return all the content of sms 
-	String delAllSms();     // return :  OK or ERROR .. 
+	bool delAllSms();     // return :  OK or ERROR .. 
 
 	void signalQuality();
 	void setPhoneFunctionality();

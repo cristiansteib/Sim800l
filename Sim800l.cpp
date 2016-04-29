@@ -220,9 +220,11 @@ String Sim800l::readSms(uint8_t number){
 }
 
 
-String Sim800l::delAllSms(){ 
+bool Sim800l::delAllSms(){ 
   SIM.print(F("at+cmgda=\"del all\"\n\r"));
-  return _readSerial();  
+  _buffer=_readSerial();
+  if (_buffer.indexOf("OK")!=-1) {return true;}else {return false;}
+  
 }
 
 
