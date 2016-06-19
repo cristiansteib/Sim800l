@@ -101,7 +101,8 @@ void Sim800l::setPhoneFunctionality(){
   */
   SIM.print (F("AT+CFUN=1\r\n"));
 }
-
+ //TODO: function sleep..
+ // void Sim800l::sleep(){}
 
 void Sim800l::signalQuality(){
 /*Response
