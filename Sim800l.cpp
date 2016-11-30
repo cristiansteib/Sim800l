@@ -194,7 +194,8 @@ bool Sim800l::sendSms(char* number,char* text){
     _buffer=_readSerial(); 
     SIM.print (text);
     SIM.print ("\r"); 
-    delay(100);
+	//change delay 100 to readserial	
+    _buffer=_readSerial();
     SIM.print((char)26);
     _buffer=_readSerial();
     //expect CMGS:xxx   , where xxx is a number,for the sending sms.
