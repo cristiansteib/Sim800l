@@ -2,7 +2,7 @@
 The Purpose of This library is to use the module in the most easy way and transparent.  
 Website: [Sim800l library](https://cristiansteib.github.io/Sim800l)
 
-## To download and Install.
+## Download and Install.
 Go to [Releases](https://github.com/cristiansteib/Sim800l/releases) click the " Source Code (zip) " button, then rename the uncompressed folder to **Sim800l**. 
   Check that the *Sim800l* folder contains Sim800l.cpp and Sim800l.h
 
@@ -14,7 +14,7 @@ Place the Sim800l library folder your arduinosketchfolder/libraries/ folder.
 You may need to create the libraries subfolder if its your first library. Restart the IDE.
 
 
-## connections & pinouts
+## Connections & pinouts
 Arduino Uno  |   Sim800l   |    Notes  
 -------------|-------------|------------
 +5v| (3.8v)~(4.4v)!| Power supply input
