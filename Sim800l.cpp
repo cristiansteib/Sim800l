@@ -149,7 +149,7 @@ bool Sim800l::answerCall(){
 void  Sim800l::callNumber(char* number){
   SIM.print (F("ATD"));
   SIM.print (number);
-  SIM.print (F("\r\n"));
+  SIM.print(F(";\r\n"));
 }
 
 
