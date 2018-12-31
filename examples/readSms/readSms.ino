@@ -32,7 +32,7 @@
 #include <Sim800l.h>
 #include <SoftwareSerial.h> //is necesary for the library!! 
 Sim800l Sim800l;  //to declare the library
-String text;     // to almacenate the text of the sms
+String text;     // to storage the text of the sms
 uint8_t index;   // to indicate the message to read.
 
 
