@@ -221,7 +221,19 @@ String Sim800l::getNumberSms(uint8_t index){
   }
 }
 
-
+String Sim800l::getNameSms(uint8_t index){
+  _buffer=readSms(index);
+  Serial.println(_buffer.length());
+  if (_buffer.length() > 10) //avoid empty sms
+  {
+    uint8_t _idx1=_buffer.indexOf("+CMGR:");
+    _idx1=_buffer.indexOf("\",\"",_idx1+1);
+    _idx1=_buffer.indexOf("\",\"",_idx1+1);
+    return _buffer.substring(_idx1+3,_buffer.indexOf("\"",_idx1+4));
+  }else{
+    return "";
+  }
+}
 
 String Sim800l::readSms(uint8_t index){
   SIM.print (F("AT+CMGF=1\r")); 
@@ -237,6 +249,33 @@ String Sim800l::readSms(uint8_t index){
     }
   else
     return "";
+}
+
+String Sim800l::getTextSms(uint8_t index){
+  _buffer=readSms(index);
+  Serial.println(_buffer.length());
+  if (_buffer.length() > 10) //avoid empty sms
+  {
+    uint8_t _idx1=_buffer.indexOf("\n");
+    _idx1=_buffer.indexOf("\n",_idx1+1);
+    return _buffer.substring(_idx1+1,_buffer.indexOf("OK",_idx1+2)-2);
+  }else{
+    return "";
+  }
+}
+
+void Sim800l::simSleep(){
+  SIM.print (F("AT+CSCLK=2\r")); // sleepmode: enter sleep automatically
+  delay(50);
+  return;
+}
+
+void Sim800l::simWakeUp(){
+  SIM.print (F("AT")); 
+  delay(100);
+  SIM.print (F("AT+CSCLK=0\r")); 
+  delay(50);
+  return;
 }
 
 
