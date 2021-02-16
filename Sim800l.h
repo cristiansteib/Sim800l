@@ -65,7 +65,11 @@ class Sim800l
  	//Methods for sms || Funciones de SMS.
 	bool sendSms(char* number,char* text);	 
 	String readSms(uint8_t index); //return all the content of sms
-	String getNumberSms(uint8_t index); //return the number of the sms..   
+	String getNumberSms(uint8_t index); //return the number of the sms..
+	String getNameSms(uint8_t index); //return the name of the sms sender..
+	String getTextSms(uint8_t index); //return the transmitted text of the sms..  
+	void simSleep(); //automatically set modem in sleep mode   
+	void simWakeUp(); //automatically set modem in awake mode  
 	bool delAllSms();     // return :  OK or ERROR .. 
 
 	void signalQuality();

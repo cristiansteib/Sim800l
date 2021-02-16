@@ -30,9 +30,13 @@ Name|Return|Notes
 :-------|:-------:|:-----------------------------------------------:|
 begin()|None|Initialize the library
 reset()|None|Reset the module,and wait to Sms Ready.
+simSleep()|None|Activate automatic sleep mode
+simWakeUp()|None|Deactivate automatic sleep mode
 sendSms(number,text)|true or false|parameters must be Strings.
 readSms(index)|String|index is the position of the sms in the prefered memory storage
+getNameSms(index)|String|returns the name of the sender of an sms from the phonebook
 getNumberSms(index)|String|returns the number of the sms.
+getTextSms(index)|String|returns only the transmitted text of an SMS as a String
 delAllSms()|true or false|Delete all sms
 answerCall()|true or false|
 callNumber(number)|None|
